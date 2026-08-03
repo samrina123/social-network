@@ -1,26 +1,47 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getApiBaseUrl } from '../utils/apiConfig';
 
+const DEFAULT_INITIAL_USER = {
+  id: 'user_samrina_default',
+  name: 'Samrina Mughal',
+  username: 'samrina',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+  bio: '✨ Creator & Explorer on InstaPulse.',
+  postsCount: 1,
+  followersCount: 142,
+  followingCount: 89,
+  isOnline: true,
+  privacy: { isPrivateProfile: false, showOnlineStatus: true, allowTagging: 'everyone' }
+};
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Restore persisted registered users from localStorage
+  // Restore persisted registered users from localStorage or default initial user
   const [users, setUsers] = useState(() => {
     try {
       const saved = localStorage.getItem('instapulse_registered_users');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+      return [DEFAULT_INITIAL_USER];
     } catch (e) {
-      return [];
+      return [DEFAULT_INITIAL_USER];
     }
   });
 
-  // Restore persisted active current user session from localStorage
+  // Restore persisted active current user session from localStorage or default initial user
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('instapulse_active_user');
-      return saved ? JSON.parse(saved) : (users[0] || null);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.id) return parsed;
+      }
+      return users[0] || DEFAULT_INITIAL_USER;
     } catch (e) {
-      return users[0] || null;
+      return users[0] || DEFAULT_INITIAL_USER;
     }
   });
 
