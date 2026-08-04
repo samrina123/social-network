@@ -1,0 +1,16 @@
+{
+  "name": "social-network-server",
+  "version": "1.0.0",
+  "description": "Express + Socket.io WebSockets server for InstaPulse Social Network",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^9.9.1",
+    "socket.io": "^4.7.5"
+  }
+}
